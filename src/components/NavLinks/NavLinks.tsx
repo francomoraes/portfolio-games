@@ -1,4 +1,4 @@
-import CustomNavLink from '../NavLink/NavLink';
+import CustomNavLink from '../CustomNavLink/CustomNavLink';
 
 const NavLinks = () => {
     return (
