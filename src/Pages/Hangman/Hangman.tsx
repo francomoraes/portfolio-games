@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Hangman = () => {
-    return <div>Hangman</div>;
+    return <div className="h-screen">Hangman</div>;
 };
 
 export default Hangman;
