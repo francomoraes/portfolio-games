@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useBackgroundColorEffect } from '../../hooks/useBackgroundColorEffect';
 import { FaHandRock, FaHandPaper, FaHandScissors } from 'react-icons/fa';
 import { RiRestartLine } from 'react-icons/ri';
 
 const RockPaperScissors = () => {
-    const [playerScore, setPlayerScore] = useState(0);
-    const [computerScore, setComputerScore] = useState(0);
-    const [draw, setDraw] = useState(0);
+    const [playerScore, setPlayerScore] = useState<number>(0);
+    const [computerScore, setComputerScore] = useState<number>(0);
+    const [draw, setDraw] = useState<number>(0);
     const [playerChoice, setPlayerChoice] = useState('');
     const [computerChoice, setComputerChoice] = useState('');
 
@@ -30,6 +30,27 @@ const RockPaperScissors = () => {
         '#8f8f8f',
         '#E5E7EB'
     );
+
+    useEffect(() => {
+        const gameDataRockPaperScissors = localStorage.getItem(
+            'gameDataRockPaperScissors'
+        );
+        if (gameDataRockPaperScissors) {
+            const { playerScore, computerScore, draw } = JSON.parse(
+                gameDataRockPaperScissors
+            );
+            setPlayerScore(playerScore);
+            setComputerScore(computerScore);
+            setDraw(draw);
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(
+            'gameDataRockPaperScissors',
+            JSON.stringify({ playerScore, computerScore, draw })
+        );
+    }, [playerScore, computerScore, draw]);
 
     interface Outcomes {
         [key: string]: {

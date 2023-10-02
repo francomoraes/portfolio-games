@@ -22,9 +22,9 @@ const HangmanGame = () => {
     }, []);
 
     useEffect(() => {
-        const gameData = localStorage.getItem('gameData');
-        if (gameData) {
-            const { wins, losses } = JSON.parse(gameData);
+        const gameDataHangman = localStorage.getItem('gameDataHangman');
+        if (gameDataHangman) {
+            const { wins, losses } = JSON.parse(gameDataHangman);
             setWins(wins);
             setLosses(losses);
         }
@@ -50,7 +50,10 @@ const HangmanGame = () => {
     }, [attemptsLeft]);
 
     useEffect(() => {
-        localStorage.setItem('gameData', JSON.stringify({ wins, losses }));
+        localStorage.setItem(
+            'gameDataHangman',
+            JSON.stringify({ wins, losses })
+        );
     }, [wins, losses]);
 
     const handleGuess = (letter: string) => {
