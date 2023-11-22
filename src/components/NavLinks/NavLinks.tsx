@@ -1,6 +1,6 @@
-import CustomNavLink from '../CustomNavLink/CustomNavLink';
+import { CustomNavLink } from '..';
 
-const NavLinks = () => {
+export const NavLinks = () => {
     return (
         <>
             <CustomNavLink to="/">Home</CustomNavLink>
@@ -11,5 +11,3 @@ const NavLinks = () => {
         </>
     );
 };
-
-export default NavLinks;

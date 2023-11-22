@@ -3,7 +3,7 @@ import { useBackgroundColorEffect } from '../../hooks/useBackgroundColorEffect';
 import { FaHandRock, FaHandPaper, FaHandScissors } from 'react-icons/fa';
 import { RiRestartLine } from 'react-icons/ri';
 
-const RockPaperScissors = () => {
+export const RockPaperScissorsGame = () => {
     const [playerScore, setPlayerScore] = useState<number>(0);
     const [computerScore, setComputerScore] = useState<number>(0);
     const [draw, setDraw] = useState<number>(0);
@@ -100,13 +100,13 @@ const RockPaperScissors = () => {
     };
 
     const spanStyle =
-        'grid-span-row-1 grid-span-col-1 bg-gray-200 p-[8px] rounded-lg text-center font-medium min-h-[88px] flex items-center justify-center text-[12px] hd:text-[24px]';
+        'grid-span-row-1 grid-span-col-1 bg-gray-200 p-[8px] rounded-lg text-center font-medium min-h-[88px] flex items-center justify-center text-[12px] xl:text-[24px]';
     const buttonStyle =
-        'text-2xl my-[8px] hd:my-0 p-[16px] rounded-lg bg-gray-300 hover:bg-gray-400 active:scale-95 transition duration-250 w-full flex items-center justify-center text-[12px] hd:text-[24px] grid-span-col-1 grid-span-row-1';
+        'text-2xl my-[8px] xl:my-0 p-[16px] rounded-lg bg-gray-300 hover:bg-gray-400 active:scale-95 transition duration-250 w-full flex items-center justify-center text-[12px] xl:text-[24px] grid-span-col-1 grid-span-row-1';
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] hd:p-[32px] rounded shadow-md">
+            <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] xl:p-[32px] rounded shadow-md">
                 <h1 className="text-[24px] font-bold my-[16px]">
                     Rock, Paper, Scissors
                 </h1>
@@ -128,7 +128,7 @@ const RockPaperScissors = () => {
                         Computer Choice: {computerChoice}
                     </span>
                 </div>
-                <div className="w-full grid hd:grid-cols-2 hd:grid-rows-2 hd:gap-[16px]">
+                <div className="w-full grid xl:grid-cols-2 xl:grid-rows-2 xl:gap-[16px]">
                     <button
                         className={buttonStyle}
                         onClick={() => playGame('rock')}
@@ -159,5 +159,3 @@ const RockPaperScissors = () => {
         </div>
     );
 };
-
-export default RockPaperScissors;

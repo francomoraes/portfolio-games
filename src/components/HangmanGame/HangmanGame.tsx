@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useBackgroundColorEffect } from '../../hooks/useBackgroundColorEffect';
 
-const HangmanGame = () => {
+export const HangmanGame = () => {
     const [wins, setWins] = useState(0);
     const [losses, setLosses] = useState(0);
 
@@ -13,8 +13,8 @@ const HangmanGame = () => {
     const [attemptsLeft, setAttemptsLeft] = useState(maxAttempts);
     const [gameStatus, setGameStatus] = useState('playing');
 
-    useBackgroundColorEffect('#hangman-wins', wins, '#00f', '#E5E7EB');
-    useBackgroundColorEffect('#hangman-losses', losses, '#f00', '#E5E7EB');
+    useBackgroundColorEffect('#hangman-wins', wins, '#56d8ff', '#E5E7EB');
+    useBackgroundColorEffect('#hangman-losses', losses, '#f7a3a3', '#E5E7EB');
 
     useEffect(() => {
         const randomIndex = Math.floor(Math.random() * words.length);
@@ -29,6 +29,13 @@ const HangmanGame = () => {
             setLosses(losses);
         }
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem(
+            'gameDataHangman',
+            JSON.stringify({ wins, losses })
+        );
+    }, [wins, losses]);
 
     useEffect(() => {
         if (wordToGuess === '') return;
@@ -49,13 +56,6 @@ const HangmanGame = () => {
         }
     }, [attemptsLeft]);
 
-    useEffect(() => {
-        localStorage.setItem(
-            'gameDataHangman',
-            JSON.stringify({ wins, losses })
-        );
-    }, [wins, losses]);
-
     const handleGuess = (letter: string) => {
         if (gameStatus === 'playing') {
             setGuessedLetters(
@@ -72,7 +72,7 @@ const HangmanGame = () => {
         return wordToGuess.split('').map((letter, index) => (
             <span
                 key={index}
-                className="letter w-[16px] hd:w-[24px] flex justify-center"
+                className="letter w-[16px] xl:w-[24px] flex justify-center"
             >
                 {guessedLetters.has(letter) ? letter : '_'}
             </span>
@@ -97,6 +97,15 @@ const HangmanGame = () => {
         ));
     };
 
+    const winRatio = () => {
+        const tempWinRatio = ((wins * 100) / (wins + losses)).toFixed(1);
+        if (typeof tempWinRatio === 'number') {
+            return tempWinRatio;
+        } else {
+            return 0;
+        }
+    };
+
     const handleRestart = () => {
         // Reset the game
         setGuessedLetters(new Set());
@@ -109,11 +118,11 @@ const HangmanGame = () => {
     };
 
     const spanStyle =
-        'grid-span-row-1 grid-span-col-1 bg-gray-200 p-[4px] rounded-lg text-center font-semibold';
+        'grid-span-row-1 grid-span-col-1 bg-gray-200 p-[4px] rounded-lg text-center font-semibold transition-all';
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] hd:p-[32px] rounded shadow-md">
+            <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] xl:p-[32px] rounded shadow-md">
                 <h1 className="text-[24px] font-bold mb-[16px]">
                     Hangman Game
                 </h1>
@@ -128,8 +137,7 @@ const HangmanGame = () => {
                         Total Games: {wins + losses}
                     </span>
                     <span className={spanStyle} id="hangman-ratio">
-                        Win Ratio: {((wins * 100) / (wins + losses)).toFixed(1)}
-                        %
+                        Win Ratio: {winRatio()}%
                     </span>
                 </div>
                 <div className="text-[20px] font-medium my-[16px] flex flex-col items-center">
@@ -146,13 +154,13 @@ const HangmanGame = () => {
                     Attempts Left: {attemptsLeft}
                 </div>
                 <div className="flex flex-col items-center mb-[16px]">
-                    <div className="my-[3px] grid grid-cols-10 grid-rows-1 gap-[4px] hd:w-full">
+                    <div className="my-[3px] grid grid-cols-10 grid-rows-1 gap-[4px] xl:w-full">
                         {renderAlphabetButtons('qwertyuiop')}
                     </div>
-                    <div className="my-[3px] grid grid-cols-9 grid-rows-1 gap-[4px] hd:w-full hd:px-[50px]">
+                    <div className="my-[3px] grid grid-cols-9 grid-rows-1 gap-[4px] xl:w-full xl:px-[50px]">
                         {renderAlphabetButtons('asdfghjkl')}
                     </div>
-                    <div className="my-[3px] grid grid-cols-7 grid-rows-1 gap-[4px] hd:w-full hd:px-[158px]">
+                    <div className="my-[3px] grid grid-cols-7 grid-rows-1 gap-[4px] xl:w-full xl:px-[158px]">
                         {renderAlphabetButtons('zxcvbnm')}
                     </div>
                 </div>
@@ -178,5 +186,3 @@ const HangmanGame = () => {
         </div>
     );
 };
-
-export default HangmanGame;

@@ -9,10 +9,11 @@ export const useBackgroundColorEffect = (
     useEffect(() => {
         const elem = document.querySelector(selector) as HTMLElement | null;
         if (elem) {
+            elem.classList.add(`bg-[${effectColor}]`);
             elem.style.backgroundColor = effectColor;
             setTimeout(() => {
                 elem.style.backgroundColor = afterColor;
-            }, 500);
+            }, 1000);
         }
     }, [controlVariable]);
 };

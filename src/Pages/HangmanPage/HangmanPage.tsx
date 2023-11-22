@@ -1,4 +1,4 @@
-import HangmanGame from '../../components/HangmanGame/HangmanGame';
+import { HangmanGame } from '../../components';
 
 const HangmanPage = () => {
     return (

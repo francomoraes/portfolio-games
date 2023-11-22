@@ -1,4 +1,4 @@
-import RockPaperScissorsGame from '../../components/RockPaperScissorsGame/RockPaperScissorsGame';
+import { RockPaperScissorsGame } from '../../components';
 
 const RockPaperScissors = () => {
     return (
