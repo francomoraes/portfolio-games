@@ -14,7 +14,7 @@ export const RockPaperScissorsGame = () => {
     useBackgroundColorEffect(
         '#computerScore',
         computerScore,
-        '#f00',
+        '#ff9090',
         '#E5E7EB'
     );
     useBackgroundColorEffect('#drawScore', draw, '#fffb00', '#E5E7EB');
@@ -105,7 +105,7 @@ export const RockPaperScissorsGame = () => {
         'text-2xl my-[8px] xl:my-0 p-[16px] rounded-lg bg-gray-300 hover:bg-gray-400 active:scale-95 transition duration-250 w-full flex items-center justify-center text-[12px] xl:text-[24px] grid-span-col-1 grid-span-row-1';
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="py-[60px] flex items-center justify-center bg-transparent">
             <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] xl:p-[32px] rounded shadow-md">
                 <h1 className="text-[24px] font-bold my-[16px]">
                     Rock, Paper, Scissors

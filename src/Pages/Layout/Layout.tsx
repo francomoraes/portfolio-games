@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { CustomDialog, SignUpDialog, StandardNavbar } from '../../components';
+import {
+    CustomDialog,
+    CustomDrawer,
+    SignUpDialog,
+    StandardNavbar
+} from '../../components';
 import { useUserContext } from '../../contexts/userContext';
 import { SignInDialog } from '../../components/SignInDialog';
+import { useDrawerContext } from '../../contexts/DrawerContext';
 
 const Layout = () => {
     const { currentUser }: any = useUserContext() || {};
+    const { open, setOpen } = useDrawerContext();
     const [showSignUpDialog, setShowSignUpDialog] = useState<boolean>(false);
     const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false);
 
@@ -27,7 +34,7 @@ const Layout = () => {
     }, [currentUser]);
 
     return (
-        <>
+        <div className="layout w-full">
             <CustomDialog open={showSignUpDialog} handler={handleSignUpDialog}>
                 <SignUpDialog
                     handler={handleSignUpDialog}
@@ -40,14 +47,12 @@ const Layout = () => {
                     onSignUpClick={handleSignUpClick}
                 />
             </CustomDialog>
-            <div className="max-w-[1360px] mx-auto bg-gray-800 relative">
-                <button onClick={handleSignUpDialog}>Open</button>
+            <div className="max-w-[1360px] w-full mx-auto bg-gray-800 relative">
                 <StandardNavbar />
-                <div className="outlet-container absolute inset-0 top-[60px]">
-                    <Outlet />
-                </div>
+                <Outlet />
+                <CustomDrawer open={open} setOpen={setOpen} />
             </div>
-        </>
+        </div>
     );
 };
 

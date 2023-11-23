@@ -11,7 +11,12 @@ export const CustomDialog = ({
     children: React.ReactNode;
 }) => {
     return (
-        <Dialog className="p-[12px]" open={open} handler={handler} size="sm">
+        <Dialog
+            className="p-[12px] bg-zinc-900 shadow-2xl shadow-gray-700"
+            open={open}
+            handler={handler}
+            size="sm"
+        >
             {children}
         </Dialog>
     );

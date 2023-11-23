@@ -1,30 +1,20 @@
-import { useState } from 'react';
-import { Navbar } from '@material-tailwind/react';
-import { TiThMenu } from 'react-icons/ti';
-import { CustomDrawer, NavLinks } from '..';
+import { IconButton, Navbar } from '@material-tailwind/react';
+import { NavLinks, SignOut } from '..';
+import { useDrawerContext } from '../../contexts/DrawerContext';
 
 export const StandardNavbar = () => {
-    const [open, setOpen] = useState(false);
-    const toggleDrawer = () => setOpen(!open);
-
+    const { setOpen } = useDrawerContext();
     return (
-        <>
-            <Navbar
-                className={`flex z-50 sticky top-0 left-0 right-0 items-center overflow-hidden pl-[32px] shadow-lg bg-gray-300 bg-opacity-90 transition-all duration-500 ease-in-out rounded-none`}
-            >
-                <button
-                    className={`transition-all ${
-                        open ? 'opacity-0' : 'opacity-100'
-                    } xl:hidden w-[40px] h-[32px] px-[8px] text-slate-700 bg-transparent my-[15px] active:bg-white active:bg-opacity-20 active:scale-95`}
-                    onClick={toggleDrawer}
-                >
-                    <TiThMenu className="w-full h-full" />
-                </button>
-                <div className="hidden xl:flex items-center w-full">
-                    <NavLinks />
-                </div>
-            </Navbar>
-            <CustomDrawer open={open} setOpen={setOpen} />
-        </>
+        <Navbar
+            className={`!max-w-full flex items-center rounded-t-none sticky top-0 z-40`}
+        >
+            <IconButton variant="text" onClick={() => setOpen(true)}>
+                <i className="fa-solid fa-bars fa-xl"></i>
+            </IconButton>
+            <div className="hidden xl:flex items-center w-full">
+                <NavLinks />
+            </div>
+            <SignOut className="hidden lg:flex" />
+        </Navbar>
     );
 };

@@ -121,7 +121,7 @@ export const HangmanGame = () => {
         'grid-span-row-1 grid-span-col-1 bg-gray-200 p-[4px] rounded-lg text-center font-semibold transition-all';
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="py-[60px] flex items-center justify-center bg-transparent">
             <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] xl:p-[32px] rounded shadow-md">
                 <h1 className="text-[24px] font-bold mb-[16px]">
                     Hangman Game

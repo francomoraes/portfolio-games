@@ -1,13 +1,16 @@
 import { HashRouter } from 'react-router-dom';
 import Routes from './routes';
 import { UserProvider } from './contexts/userContext';
+import { DrawerProvider } from './contexts/DrawerContext';
 
 function App() {
     return (
         <UserProvider>
-            <HashRouter>
-                <Routes />
-            </HashRouter>
+            <DrawerProvider>
+                <HashRouter>
+                    <Routes />
+                </HashRouter>
+            </DrawerProvider>
         </UserProvider>
     );
 }

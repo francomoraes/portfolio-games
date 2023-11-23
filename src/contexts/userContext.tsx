@@ -1,33 +1,36 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../firebase-config';
 import { onAuthStateChanged } from 'firebase/auth';
-import { User as FirebaseUser } from 'firebase/auth';
+import { User } from 'firebase/auth';
 
-interface UserProviderProps {
-    children: React.ReactNode;
+interface UserContextType {
+    currentUser: User | null;
+    setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-const UserContext = createContext<FirebaseUser | null>(null);
+export const UserContext = createContext<UserContextType>(
+    {} as UserContextType
+);
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState<any>(null);
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
         });
-    }, []);
+    }, [auth.currentUser]);
 
     return (
-        <UserContext.Provider value={currentUser}>
+        <UserContext.Provider value={{ currentUser, setCurrentUser }}>
             {children}
         </UserContext.Provider>
     );
 };
 
-export const useUserContext = () => {
+export const useUserContext = (): UserContextType => {
     const context = useContext(UserContext);
-    if (context === undefined) {
+    if (!context) {
         throw new Error('useUserContext must be used within a UserProvider');
     }
     return context;
