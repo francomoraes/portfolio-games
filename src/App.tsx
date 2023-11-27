@@ -7,9 +7,11 @@ function App() {
     return (
         <UserProvider>
             <DrawerProvider>
-                <HashRouter>
-                    <Routes />
-                </HashRouter>
+                <UserProvider>
+                    <HashRouter>
+                        <Routes />
+                    </HashRouter>
+                </UserProvider>
             </DrawerProvider>
         </UserProvider>
     );

@@ -76,10 +76,12 @@ export const SignUpDialog = ({
                             📧 Your email
                         </Typography>
                         <Input
-                            size="md"
-                            placeholder="mail@mail.com"
+                            className="text-gray-300"
+                            color="white"
                             crossOrigin={'anonymous'}
                             onBlur={(e) => setRegisterEmail(e.target.value)}
+                            placeholder="mail@mail.com"
+                            size="md"
                         />
                     </div>
                     <div>
@@ -87,13 +89,15 @@ export const SignUpDialog = ({
                             🔒 Your password
                         </Typography>
                         <Input
-                            size="md"
-                            placeholder="********"
-                            type="password"
+                            className="text-gray-300"
+                            color="white"
                             crossOrigin={'anonymous'}
                             onChange={(e) =>
                                 setRegisterPassword(e.target.value)
                             }
+                            placeholder="********"
+                            size="md"
+                            type="password"
                         />
                     </div>
                 </div>

@@ -74,12 +74,12 @@ export const SignInDialog = ({
                             📧 Email
                         </Typography>
                         <Input
-                            size="md"
-                            placeholder="mail@mail.com"
-                            crossOrigin={'anonymous'}
-                            onBlur={(e) => setSignInEmail(e.target.value)}
                             className="text-gray-300"
                             color="white"
+                            crossOrigin={'anonymous'}
+                            onBlur={(e) => setSignInEmail(e.target.value)}
+                            placeholder="mail@mail.com"
+                            size="md"
                         />
                     </div>
                     <div>

@@ -8,8 +8,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase-config';
 
-export const HangmanContext = createContext<unknown>(null);
-
 interface HangmanProviderProps {
     children: React.ReactNode;
     currentUser: any;
@@ -24,6 +22,14 @@ interface UserDataProps {
     wins?: number;
     losses?: number;
 }
+interface HangmanContextType {
+    wins: number;
+    losses: number;
+    updateWins: () => void;
+    updateLosses: () => void;
+}
+
+export const HangmanContext = createContext<HangmanContextType | null>(null);
 
 export const HangmanProvider: React.FC<HangmanProviderProps> = ({
     children,
@@ -127,11 +133,12 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
     );
 };
 
-export const useHangmanContext = () => {
-    if (!HangmanContext) {
+export const useHangmanContext = (): HangmanContextType => {
+    const context = useContext(HangmanContext);
+    if (!context) {
         throw new Error(
             'useHangmanContext must be used within a HangmanProvider'
         );
     }
-    return useContext(HangmanContext);
+    return context;
 };

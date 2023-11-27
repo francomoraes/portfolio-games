@@ -1,7 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useBackgroundColorEffect } from '../../hooks/useBackgroundColorEffect';
+import { useHangmanContext } from '../../contexts/hangmanContext';
+import { useUserContext } from '../../contexts/userContext';
 
 export const HangmanGame = () => {
+    const { currentUser } = useUserContext() || {};
+    const {
+        wins: contextWins,
+        updateWins: contextUpdateWins,
+        losses: contextLosses,
+        updateLosses: contextUpdateLosses
+    } = useHangmanContext() || {};
+
+    console.log('currentUser: ', currentUser?.email?.split('@')[0]);
+    console.log('contextWins: ', contextWins);
+
     const [wins, setWins] = useState(0);
     const [losses, setLosses] = useState(0);
 
@@ -72,7 +85,7 @@ export const HangmanGame = () => {
         return wordToGuess.split('').map((letter, index) => (
             <span
                 key={index}
-                className="letter w-[16px] xl:w-[24px] flex justify-center"
+                className="letter w-[16px] xl:w-[24px] flex justify-center text-gray-200"
             >
                 {guessedLetters.has(letter) ? letter : '_'}
             </span>
@@ -84,7 +97,7 @@ export const HangmanGame = () => {
         return alphabet.map((letter) => (
             <button
                 key={letter}
-                className={`grid-span-col-1 grid-span-row-1 bg-gray-100 p-[8px] alphabet-button rounded-lg hover:bg-gray-300 transition-all ${
+                className={`w-[30px] lg:w-[40px] bg-gray-100 p-[8px] alphabet-button rounded-lg hover:bg-gray-300 transition-all ${
                     guessedLetters.has(letter) ? 'opacity-20' : ''
                 }`}
                 onClick={() => handleGuess(letter)}
@@ -117,13 +130,18 @@ export const HangmanGame = () => {
         setWordToGuess(words[randomIndex]);
     };
 
+    const handleResetScores = () => {
+        setWins(0);
+        setLosses(0);
+    };
+
     const spanStyle =
         'grid-span-row-1 grid-span-col-1 bg-gray-200 p-[4px] rounded-lg text-center font-semibold transition-all';
 
     return (
         <div className="py-[60px] flex items-center justify-center bg-transparent">
-            <div className="hd:w-[calc(100%-200px)] bg-white m-[12px] p-[12px] xl:p-[32px] rounded shadow-md">
-                <h1 className="text-[24px] font-bold mb-[16px]">
+            <div className="lg:w-[calc(100%-200px)] bg-gray-700 m-[12px] p-[12px] xl:p-[32px] rounded shadow-md">
+                <h1 className="text-[24px] font-bold mb-[16px] text-gray-100">
                     Hangman Game
                 </h1>
                 <div className="grid grid-cols-2 grid-rows-2 gap-[8px] justify-between w-full">
@@ -141,7 +159,9 @@ export const HangmanGame = () => {
                     </span>
                 </div>
                 <div className="text-[20px] font-medium my-[16px] flex flex-col items-center">
-                    <div className="flex justify-center">Guess the word:</div>
+                    <div className="flex justify-center text-gray-100">
+                        Guess the word:
+                    </div>
                     <div
                         className={`flex justify-center w-fit p-[8px] transition-all ${
                             gameStatus === 'won' ? 'bg-blue-300 rounded-lg' : ''
@@ -150,18 +170,19 @@ export const HangmanGame = () => {
                         {renderWord()}
                     </div>
                 </div>
-                <div className="text-lg mb-[16px]">
+                <div className="text-lg mb-[16px] text-gray-100">
                     Attempts Left: {attemptsLeft}
                 </div>
                 <div className="flex flex-col items-center mb-[16px]">
-                    <div className="my-[3px] grid grid-cols-10 grid-rows-1 gap-[4px] xl:w-full">
+                    <div className="my-[3px] flex gap-[4px]">
                         {renderAlphabetButtons('qwertyuiop')}
                     </div>
-                    <div className="my-[3px] grid grid-cols-9 grid-rows-1 gap-[4px] xl:w-full xl:px-[50px]">
+                    <div className="my-[3px] flex gap-[4px]">
                         {renderAlphabetButtons('asdfghjkl')}
                     </div>
-                    <div className="my-[3px] grid grid-cols-7 grid-rows-1 gap-[4px] xl:w-full xl:px-[158px]">
+                    <div className="my-[3px] flex gap-[4px]">
                         {renderAlphabetButtons('zxcvbnm')}
+                        <div className="w-[30px] lg:w-[40px]"></div>
                     </div>
                 </div>
                 {gameStatus === 'won' && (
@@ -174,14 +195,22 @@ export const HangmanGame = () => {
                         Oops! You lost. The word was "{wordToGuess}"
                     </div>
                 )}
-                {(gameStatus === 'won' || gameStatus === 'lost') && (
+                <div className="flex gap-[32px]">
+                    {(gameStatus === 'won' || gameStatus === 'lost') && (
+                        <button
+                            className="mt-[16px] px-[16px] py-[8px] bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                            onClick={handleRestart}
+                        >
+                            Play Again
+                        </button>
+                    )}
                     <button
-                        className="mt-[16px] px-[16px] py-[8px] bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                        onClick={handleRestart}
+                        className="mt-[16px] px-[8px] py-[4px] bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        onClick={handleResetScores}
                     >
-                        Play Again
+                        Reset Scores
                     </button>
-                )}
+                </div>
             </div>
         </div>
     );
