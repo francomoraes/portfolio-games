@@ -1,127 +1,41 @@
-import {
-    Button,
-    IconButton,
-    Input,
-    Typography
-} from '@material-tailwind/react';
-import { auth, signInWithGoogle } from '../../firebase-config';
-import { useEffect, useState } from 'react';
-import { useUserContext } from '../../contexts/userContext';
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { Spinner } from '@material-tailwind/react';
+import { useState } from 'react';
 
-export const SignInDialog = ({
+import { Buttons, Footer, SignInForm, SignInHeader } from './components';
+
+import { handleSignIn } from './utils';
+import { SignInDialogProps } from './types';
+
+export const SignInDialog: React.FC<SignInDialogProps> = ({
     handler,
     onSignUpClick
-}: {
-    handler: () => void;
-    onSignUpClick: () => void;
 }) => {
     const [signInEmail, setSignInEmail] = useState<string>('');
     const [signInPassword, setSignInPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const { currentUser, setCurrentUser } = useUserContext();
+    const handleHandleSignIn = () =>
+        handleSignIn(signInEmail, signInPassword, setLoading, handler);
 
-    console.log(currentUser);
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setCurrentUser(user);
-            } else {
-                setCurrentUser(null);
-            }
-        });
-    }, [auth.currentUser]);
-
-    const signIn = async () => {
-        try {
-            await signInWithEmailAndPassword(auth, signInEmail, signInPassword);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const handleSignIn = () => {
-        signIn();
-        handler();
-    };
-
-    const handleSignInWithGoogle = () => {
-        signInWithGoogle();
-        handler();
-    };
+    if (loading)
+        return (
+            <div className="flex flex-col items-center justify-center w-[430px] h-[430px]">
+                <Spinner color="blue" />
+            </div>
+        );
 
     return (
         <div className="relative">
-            <IconButton
-                size="sm"
-                variant="outlined"
-                className="!absolute right-[12px] top-[12px] text-gray-300 hover:bg-gray-700"
-                onClick={handler}
-            >
-                <i className="fa-solid fa-xmark fa-lg" />
-            </IconButton>
-            <Typography variant="h5" className="text-gray-300">
-                Welcome!
-            </Typography>
-            <Typography className="text-gray-300" variant="small">
-                Nice to see you again! 😊
-            </Typography>
-            <form className="h-full w-full flex flex-col gap-[32px] my-[32px]">
-                <div className="flex flex-col gap-[24px]">
-                    <div>
-                        <Typography variant="h6" className="text-gray-300">
-                            📧 Email
-                        </Typography>
-                        <Input
-                            className="text-gray-300"
-                            color="white"
-                            crossOrigin={'anonymous'}
-                            onBlur={(e) => setSignInEmail(e.target.value)}
-                            placeholder="mail@mail.com"
-                            size="md"
-                        />
-                    </div>
-                    <div>
-                        <Typography variant="h6" className="text-gray-300">
-                            🔒 Password
-                        </Typography>
-                        <Input
-                            size="md"
-                            placeholder="********"
-                            type="password"
-                            crossOrigin={'anonymous'}
-                            onChange={(e) => setSignInPassword(e.target.value)}
-                            color="white"
-                            className="text-gray-300"
-                        />
-                    </div>
-                </div>
-                <Button color="blue-gray" onClick={handleSignIn}>
-                    Sign in
-                </Button>
-            </form>
-            <div className="flex gap-[24px]">
-                <Button color="blue" fullWidth onClick={handleSignInWithGoogle}>
-                    Sign in with google
-                </Button>
-                <Button className="text-gray-300" fullWidth onClick={handler}>
-                    Play as guest
-                </Button>
-            </div>
-            <div className="flex items-center mt-[24px]">
-                <Typography className="text-gray-300" variant="small">
-                    Don't have an account?
-                    <i className="fa-solid fa-arrow-right mx-[6px]" />
-                </Typography>
-                <Button
-                    variant="text"
-                    className="p-0 text-blue-300"
-                    onClick={onSignUpClick}
-                >
-                    Sign up
-                </Button>
-            </div>
+            <SignInHeader handler={handler} />
+            <SignInForm
+                onSignIn={handleHandleSignIn}
+                setSignInEmail={setSignInEmail}
+                setSignInPassword={setSignInPassword}
+                signInEmail={signInEmail}
+                signInPassword={signInPassword}
+            />
+            <Buttons handler={handler} />
+            <Footer onSignUpClick={onSignUpClick} />
         </div>
     );
 };

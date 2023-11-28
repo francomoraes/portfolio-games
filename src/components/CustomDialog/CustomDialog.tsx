@@ -12,7 +12,7 @@ export const CustomDialog = ({
 }) => {
     return (
         <Dialog
-            className="p-[12px] bg-slate-700 shadow-2xl shadow-gray-400"
+            className="p-[12px] bg-slate-700"
             open={open}
             handler={handler}
             size="sm"

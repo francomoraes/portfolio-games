@@ -4,7 +4,7 @@ import {
     Input,
     Typography
 } from '@material-tailwind/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { auth, signInWithGoogle } from '../../firebase-config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
