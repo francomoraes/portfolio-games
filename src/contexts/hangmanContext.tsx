@@ -27,6 +27,7 @@ interface HangmanContextType {
     losses: number;
     updateWins: () => void;
     updateLosses: () => void;
+    resetScores: () => void;
 }
 
 export const HangmanContext = createContext<HangmanContextType | null>(null);
@@ -40,6 +41,10 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
 
     const updateWins = () => setWins(wins + 1);
     const updateLosses = () => setLosses(losses + 1);
+    const resetScores = () => {
+        setWins(0);
+        setLosses(0);
+    };
 
     const hangmanCollectionRef = collection(db, 'hangman-data');
 
@@ -72,7 +77,7 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
     }, [currentUser]);
 
     useEffect(() => {
-        const updateScoresTable = async () => {
+        const updateScoresTable = async (wins: number, losses: number) => {
             const data = await getDocs(hangmanCollectionRef);
             const appData = data.docs.map((doc) => ({
                 ...doc.data(),
@@ -94,8 +99,7 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
                 await updateDoc(userDoc, newValues);
             }
         };
-
-        updateScoresTable();
+        updateScoresTable(wins, losses);
     }, [wins, losses]);
 
     useEffect(() => {
@@ -125,7 +129,8 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
                 wins,
                 losses,
                 updateWins,
-                updateLosses
+                updateLosses,
+                resetScores
             }}
         >
             {children}

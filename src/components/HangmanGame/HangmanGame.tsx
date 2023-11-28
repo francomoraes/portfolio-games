@@ -9,11 +9,9 @@ export const HangmanGame = () => {
         wins: contextWins,
         updateWins: contextUpdateWins,
         losses: contextLosses,
-        updateLosses: contextUpdateLosses
+        updateLosses: contextUpdateLosses,
+        resetScores: contextResetScores
     } = useHangmanContext() || {};
-
-    console.log('currentUser: ', currentUser?.email?.split('@')[0]);
-    console.log('contextWins: ', contextWins);
 
     const [wins, setWins] = useState(0);
     const [losses, setLosses] = useState(0);
@@ -58,14 +56,18 @@ export const HangmanGame = () => {
             .every((letter) => guessedLetters.has(letter));
         if (isGameWon) {
             setGameStatus('won');
-            setWins((prevWins) => prevWins + 1);
+            currentUser
+                ? contextUpdateWins()
+                : setWins((prevWins) => prevWins + 1);
         }
     }, [wordToGuess, guessedLetters]);
 
     useEffect(() => {
         if (attemptsLeft === 0) {
             setGameStatus('lost');
-            setLosses((prevLosses) => prevLosses + 1);
+            currentUser
+                ? contextUpdateLosses()
+                : setLosses((prevLosses) => prevLosses + 1);
         }
     }, [attemptsLeft]);
 
@@ -111,12 +113,16 @@ export const HangmanGame = () => {
     };
 
     const winRatio = () => {
-        const tempWinRatio = ((wins * 100) / (wins + losses)).toFixed(1);
-        if (typeof tempWinRatio === 'number') {
-            return tempWinRatio;
-        } else {
-            return 0;
-        }
+        const localTempWinRatio = Number(
+            ((wins * 100) / (wins + losses)).toFixed(1)
+        );
+        const contextTempWinRatio = Number(
+            ((contextWins * 100) / (contextWins + contextLosses)).toFixed(1)
+        );
+        const tempWinRatio = currentUser
+            ? contextTempWinRatio
+            : localTempWinRatio;
+        return tempWinRatio || 0;
     };
 
     const handleRestart = () => {
@@ -131,8 +137,12 @@ export const HangmanGame = () => {
     };
 
     const handleResetScores = () => {
-        setWins(0);
-        setLosses(0);
+        if (currentUser) {
+            contextResetScores();
+        } else {
+            setWins(0);
+            setLosses(0);
+        }
     };
 
     const spanStyle =
@@ -146,13 +156,16 @@ export const HangmanGame = () => {
                 </h1>
                 <div className="grid grid-cols-2 grid-rows-2 gap-[8px] justify-between w-full">
                     <span className={spanStyle} id="hangman-wins">
-                        Wins: {wins}
+                        Wins: {currentUser ? contextWins : wins}
                     </span>
                     <span className={spanStyle} id="hangman-losses">
-                        Losses: {losses}
+                        Losses: {currentUser ? contextLosses : losses}
                     </span>
                     <span className={spanStyle} id="hangman-total-games">
-                        Total Games: {wins + losses}
+                        Total Games:{' '}
+                        {currentUser
+                            ? contextLosses + contextWins
+                            : wins + losses}
                     </span>
                     <span className={spanStyle} id="hangman-ratio">
                         Win Ratio: {winRatio()}%

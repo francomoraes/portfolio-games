@@ -31,6 +31,7 @@ const Layout = () => {
 
     useEffect(() => {
         if (!currentUser) setShowSignUpDialog(true);
+        if (currentUser) setShowSignUpDialog(false);
     }, [currentUser]);
 
     return (
