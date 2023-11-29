@@ -2,6 +2,7 @@ import { IconButton, Navbar } from '@material-tailwind/react';
 import { NavLinks, SignOut } from '..';
 import { useDrawerContext } from '../../contexts/DrawerContext';
 import { useUserContext } from '../../contexts/userContext';
+import { capitalize } from '../utils';
 
 export const StandardNavbar = ({
     onStateChange
@@ -15,10 +16,11 @@ export const StandardNavbar = ({
 
     return (
         <Navbar
-            className={`!max-w-full flex items-center rounded-t-none sticky top-0 z-40`}
+            color="transparent"
+            className={`!max-w-full flex items-center rounded-t-none sticky top-0 z-40 border-b-[1px] border-gray-700 bg-gray-950`}
         >
             <IconButton variant="text" onClick={() => setOpen(true)}>
-                <i className="fa-solid fa-bars fa-xl"></i>
+                <i className="fa-solid fa-bars fa-xl text-gray-200"></i>
             </IconButton>
             <div className="hidden xl:flex items-center">
                 <NavLinks />
@@ -27,7 +29,10 @@ export const StandardNavbar = ({
             <div className="hidden lg:flex gap-[32px]">
                 <div className="hidden lg:flex flex-col items-end">
                     <p className="text-gray-500 font-semibold text-right">
-                        Hello, {email ? email.split('@')[0] : 'Guest'}
+                        Hello,{' '}
+                        {email
+                            ? capitalize(email.split('@')[0]) + ' !'
+                            : 'Guest'}
                     </p>
                     {!email && (
                         <button

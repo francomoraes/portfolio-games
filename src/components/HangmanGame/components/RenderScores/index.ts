@@ -1,0 +1,1 @@
+export { RenderScores } from './RenderScores';

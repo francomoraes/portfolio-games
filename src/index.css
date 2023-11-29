@@ -4,9 +4,24 @@
 @tailwind utilities;
 
 #root {
-    background-color: #37474f;
+    background-color: rgb(19, 19, 19);
 }
 
 * {
     font-family: Rubik, sans-serif;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
 }

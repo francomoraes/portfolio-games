@@ -16,7 +16,7 @@ export const CustomDrawer: React.FC<CustomDrawerProps> = ({
             open={open}
             onClose={toggleDrawer}
             placement="left"
-            className="bg-gray-300"
+            className="bg-gray-950 text-gray-200"
         >
             <div className="flex flex-col">
                 <NavLinks />
