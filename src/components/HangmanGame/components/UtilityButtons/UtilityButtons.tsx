@@ -4,35 +4,32 @@ import { useUserContext } from '../../../../contexts/userContext';
 import { useHangmanContext } from '../../../../contexts/hangmanContext';
 
 export const UtilityButtons: React.FC<UtilityButtonsProps> = ({
-    gameStatus,
+    gameState,
     words,
     maxAttempts,
-    setWordToGuess,
-    setGuessedLetters,
-    setAttemptsLeft,
-    setGameStatus,
-    setWins,
-    setLosses
+    setGameState
 }) => {
     const { currentUser } = useUserContext() || {};
-    const { resetScores: contextResetScores } = useHangmanContext() || {};
+    const { resetScores: contextResetScores, resetLocalScores } =
+        useHangmanContext() || {};
+    const { gameStatus } = gameState;
 
     const handleRestart = () => {
-        setGuessedLetters(new Set());
-        setAttemptsLeft(maxAttempts);
-        setGameStatus('playing');
-
-        // Choose a new random word
         const randomIndex = Math.floor(Math.random() * words.length);
-        setWordToGuess(words[randomIndex]);
+        setGameState((prevState) => ({
+            ...prevState,
+            wordToGuess: words[randomIndex],
+            guessedLetters: new Set(),
+            attemptsLeft: maxAttempts,
+            gameStatus: 'playing'
+        }));
     };
 
     const handleResetScores = () => {
         if (currentUser) {
             contextResetScores();
         } else {
-            setWins(0);
-            setLosses(0);
+            resetLocalScores();
         }
     };
 

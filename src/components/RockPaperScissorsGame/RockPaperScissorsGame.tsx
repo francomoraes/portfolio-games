@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBackgroundColorEffect } from '../../hooks/useBackgroundColorEffect';
+import { useClassListEffect } from '../../hooks/useClassListEffect';
 import { FaHandRock, FaHandPaper, FaHandScissors } from 'react-icons/fa';
 import { RiRestartLine } from 'react-icons/ri';
 
@@ -10,25 +10,30 @@ export const RockPaperScissorsGame = () => {
     const [playerChoice, setPlayerChoice] = useState('');
     const [computerChoice, setComputerChoice] = useState('');
 
-    useBackgroundColorEffect('#playerScore', playerScore, '#00f', '#E5E7EB');
-    useBackgroundColorEffect(
+    useClassListEffect(
+        '#playerScore',
+        playerScore,
+        'bg-[#0000ff]',
+        'bg-[#E5E7EB]'
+    );
+    useClassListEffect(
         '#computerScore',
         computerScore,
-        '#ff9090',
-        '#E5E7EB'
+        'bg-[#ff9090]',
+        'bg-[#E5E7EB]'
     );
-    useBackgroundColorEffect('#drawScore', draw, '#fffb00', '#E5E7EB');
-    useBackgroundColorEffect(
+    useClassListEffect('#drawScore', draw, 'bg-[#fffb00]', 'bg-[#E5E7EB]');
+    useClassListEffect(
         '#playerChoice',
         playerChoice,
-        '#8f8f8f',
-        '#E5E7EB'
+        'bg-[#8f8f8f]',
+        'bg-[#E5E7EB]'
     );
-    useBackgroundColorEffect(
+    useClassListEffect(
         '#computerChoice',
         computerChoice,
-        '#8f8f8f',
-        '#E5E7EB'
+        'bg-[#8f8f8f]',
+        'bg-[#E5E7EB]'
     );
 
     useEffect(() => {

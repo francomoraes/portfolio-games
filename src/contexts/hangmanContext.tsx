@@ -28,6 +28,13 @@ interface HangmanContextType {
     updateWins: () => void;
     updateLosses: () => void;
     resetScores: () => void;
+    resetLocalScores: () => void;
+    incrementLocalWins: () => void;
+    incrementLocalLosses: () => void;
+    localWins: number;
+    localLosses: number;
+    setLocalWins: React.Dispatch<React.SetStateAction<number>>;
+    setLocalLosses: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const HangmanContext = createContext<HangmanContextType | null>(null);
@@ -36,14 +43,57 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
     children,
     currentUser
 }) => {
-    const [wins, setWins] = useState(0);
-    const [losses, setLosses] = useState(0);
+    const [wins, setWins] = useState<number>(0);
+    const [losses, setLosses] = useState<number>(0);
+    const [localWins, setLocalWins] = useState<number>(() => {
+        const gameDataHangman = localStorage.getItem('gameDataHangman');
+        if (gameDataHangman) {
+            const { localWins } = JSON.parse(gameDataHangman);
+            return localWins;
+        } else {
+            return 0;
+        }
+    });
+    const [localLosses, setLocalLosses] = useState<number>(() => {
+        const gameDataHangman = localStorage.getItem('gameDataHangman');
+        if (gameDataHangman) {
+            const { localLosses } = JSON.parse(gameDataHangman);
+            return localLosses;
+        } else {
+            return 0;
+        }
+    });
+
+    const updateLocalStorage = (wins: number, losses: number) => {
+        const gameDataHangman = {
+            localWins: wins,
+            localLosses: losses
+        };
+        localStorage.setItem(
+            'gameDataHangman',
+            JSON.stringify(gameDataHangman)
+        );
+    };
+
+    const incrementLocalWins = () => {
+        setLocalWins((prev) => prev + 1);
+        updateLocalStorage(localWins + 1, localLosses);
+    };
+    const incrementLocalLosses = () => {
+        setLocalLosses((prev) => prev + 1);
+        updateLocalStorage(localWins, localLosses + 1);
+    };
 
     const updateWins = () => setWins(wins + 1);
     const updateLosses = () => setLosses(losses + 1);
     const resetScores = () => {
         setWins(0);
         setLosses(0);
+    };
+
+    const resetLocalScores = () => {
+        setLocalWins(0);
+        setLocalLosses(0);
     };
 
     const hangmanCollectionRef = collection(db, 'hangman-data');
@@ -130,7 +180,14 @@ export const HangmanProvider: React.FC<HangmanProviderProps> = ({
                 losses,
                 updateWins,
                 updateLosses,
-                resetScores
+                resetScores,
+                resetLocalScores,
+                incrementLocalWins,
+                incrementLocalLosses,
+                localWins,
+                localLosses,
+                setLocalWins,
+                setLocalLosses
             }}
         >
             {children}

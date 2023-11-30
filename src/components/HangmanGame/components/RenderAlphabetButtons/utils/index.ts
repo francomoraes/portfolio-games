@@ -1,0 +1,1 @@
+export { handleGuess } from './handleGuess';

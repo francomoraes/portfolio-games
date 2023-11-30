@@ -48,11 +48,11 @@ const Layout = () => {
                     onSignUpClick={handleSignUpClick}
                 />
             </CustomDialog>
-            <div className="max-w-[1360px] w-full mx-auto bg-gray-950 relative">
-                <StandardNavbar onStateChange={handleSignUpDialog} />
+            <StandardNavbar onStateChange={handleSignUpDialog} />
+            <div className="max-w-[1360px] w-full mx-auto relative">
                 <Outlet />
-                <CustomDrawer open={open} setOpen={setOpen} />
             </div>
+            <CustomDrawer open={open} setOpen={setOpen} />
         </div>
     );
 };

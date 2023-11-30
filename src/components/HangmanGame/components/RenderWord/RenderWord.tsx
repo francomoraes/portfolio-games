@@ -1,10 +1,9 @@
 import { RenderWordProps } from './types';
 
-export const RenderWord: React.FC<RenderWordProps> = ({
-    wordToGuess,
-    guessedLetters,
-    gameStatus
-}) => {
+export const RenderWord: React.FC<RenderWordProps> = ({ gameState }) => {
+    const { gameStatus, wordToGuess, guessedLetters } =
+        gameState || ({} as RenderWordProps);
+
     return (
         <div className="text-[20px] font-medium my-[16px] flex flex-col items-center">
             <div className="flex justify-center text-gray-100">
@@ -15,7 +14,7 @@ export const RenderWord: React.FC<RenderWordProps> = ({
                     gameStatus === 'won' ? 'bg-blue-300 rounded-lg' : ''
                 }`}
             >
-                {wordToGuess.split('').map((letter, index) => (
+                {wordToGuess?.split('').map((letter, index) => (
                     <span
                         key={index}
                         className="letter w-[16px] xl:w-[24px] flex justify-center text-gray-200"

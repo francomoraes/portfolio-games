@@ -1,10 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { GameStatusProps } from './types';
 
-export const GameStatus: React.FC<GameStatusProps> = ({
-    wordToGuess,
-    gameStatus
-}) => {
+export const GameStatus: React.FC<GameStatusProps> = ({ gameState }) => {
+    const { gameStatus, wordToGuess } = gameState || ({} as GameStatusProps);
     return (
         <AnimatePresence>
             <motion.div

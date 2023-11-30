@@ -1,0 +1,1 @@
+export { winRatio } from './winRatio';

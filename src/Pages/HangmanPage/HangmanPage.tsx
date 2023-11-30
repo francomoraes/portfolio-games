@@ -1,4 +1,5 @@
 import { HangmanGame } from '../../components';
+import { FruitsProvider } from '../../components/HangmanGame/contexts/FruitsContext';
 import { HangmanProvider } from '../../contexts/hangmanContext';
 import { useUserContext } from '../../contexts/userContext';
 
@@ -7,7 +8,9 @@ const HangmanPage = () => {
     return (
         <div>
             <HangmanProvider currentUser={currentUser}>
-                <HangmanGame />
+                <FruitsProvider>
+                    <HangmanGame />
+                </FruitsProvider>
             </HangmanProvider>
         </div>
     );

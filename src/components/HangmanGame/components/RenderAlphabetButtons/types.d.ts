@@ -1,7 +1,6 @@
+import { IGameState } from '../GameStatus/types';
+
 export interface RenderAlphabetButtonsProps {
-    guessedLetters: Set<string>;
-    gameStatus: string;
-    wordToGuess: string;
-    setGuessedLetters: React.Dispatch<React.SetStateAction<Set<string>>>;
-    setAttemptsLeft: React.Dispatch<React.SetStateAction<number>>;
+    gameState: IGameState;
+    setGameState: React.Dispatch<React.SetStateAction<IGameState>>;
 }

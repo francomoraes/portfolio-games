@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 
-export const useBackgroundColorEffect = (
+export const useClassListEffect = (
     selector: string,
     controlVariable: any,
-    effectColor: string,
-    afterColor: string
+    effectClass: string,
+    afterClass: string
 ) => {
     useEffect(() => {
         const elem = document.querySelector(selector) as HTMLElement | null;
         if (elem) {
-            elem.classList.add(`bg-[${effectColor}]`);
-            elem.style.backgroundColor = effectColor;
+            elem.classList.add(effectClass);
             setTimeout(() => {
-                elem.style.backgroundColor = afterColor;
+                elem.classList.remove(effectClass);
+                elem.classList.add(afterClass);
             }, 1000);
         }
     }, [controlVariable]);

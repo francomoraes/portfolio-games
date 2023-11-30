@@ -1,11 +1,15 @@
+import { IGameState } from '../../GameStatus/types';
+
 export interface UtilityButtonsProps {
-    gameStatus: string;
-    setGameStatus: React.Dispatch<React.SetStateAction<string>>;
-    setWordToGuess: React.Dispatch<React.SetStateAction<string>>;
-    setGuessedLetters: React.Dispatch<React.SetStateAction<Set<string>>>;
-    setAttemptsLeft: React.Dispatch<React.SetStateAction<number>>;
-    words: string[];
+    gameState: IGameState;
+    setGameState: React.Dispatch<
+        React.SetStateAction<{
+            wordToGuess: string;
+            guessedLetters: Set<string>;
+            attemptsLeft: number;
+            gameStatus: string;
+        }>
+    >;
     maxAttempts: number;
-    setWins: React.Dispatch<React.SetStateAction<number>>;
-    setLosses: React.Dispatch<React.SetStateAction<number>>;
+    words: string[];
 }
