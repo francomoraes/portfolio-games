@@ -1,55 +1,18 @@
-import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import {
-    CustomDialog,
-    CustomDrawer,
-    SignUpDialog,
-    StandardNavbar
-} from '../../components';
-import { useUserContext } from '../../contexts/userContext';
-import { SignInDialog } from '../../components/SignInDialog';
+import { CustomDrawer, StandardNavbar } from '../../components';
+
 import { useDrawerContext } from '../../contexts/DrawerContext';
+import { SignInDialogWrapper, SignUpDialogWrapper } from './components';
 
 const Layout = () => {
-    const { currentUser }: any = useUserContext() || {};
     const { open, setOpen } = useDrawerContext();
-    const [showSignUpDialog, setShowSignUpDialog] = useState<boolean>(false);
-    const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false);
-
-    const handleSignUpDialog = () => setShowSignUpDialog(!showSignUpDialog);
-    const handleLoginDialog = () => setShowLoginDialog(!showLoginDialog);
-
-    const handleSignInClick = () => {
-        setShowLoginDialog(true);
-        setShowSignUpDialog(false);
-    };
-
-    const handleSignUpClick = () => {
-        setShowLoginDialog(false);
-        setShowSignUpDialog(true);
-    };
-
-    useEffect(() => {
-        if (!currentUser) setShowSignUpDialog(true);
-        if (currentUser) setShowSignUpDialog(false);
-    }, [currentUser]);
 
     return (
-        <div className="layout w-full">
-            <CustomDialog open={showSignUpDialog} handler={handleSignUpDialog}>
-                <SignUpDialog
-                    handler={handleSignUpDialog}
-                    onSignInClick={handleSignInClick}
-                />
-            </CustomDialog>
-            <CustomDialog open={showLoginDialog} handler={handleLoginDialog}>
-                <SignInDialog
-                    handler={handleLoginDialog}
-                    onSignUpClick={handleSignUpClick}
-                />
-            </CustomDialog>
-            <StandardNavbar onStateChange={handleSignUpDialog} />
-            <div className="max-w-[1360px] w-full mx-auto relative">
+        <div className="layout w-full h-full">
+            <SignUpDialogWrapper />
+            <SignInDialogWrapper />
+            <StandardNavbar />
+            <div className="max-w-[1360px] w-full h-full py-[50px] px-[200px] relative">
                 <Outlet />
             </div>
             <CustomDrawer open={open} setOpen={setOpen} />

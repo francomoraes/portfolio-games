@@ -6,13 +6,11 @@ import { useUserContext } from '../../contexts/userContext';
 const HangmanPage = () => {
     const { currentUser } = useUserContext();
     return (
-        <div>
-            <HangmanProvider currentUser={currentUser}>
-                <FruitsProvider>
-                    <HangmanGame />
-                </FruitsProvider>
-            </HangmanProvider>
-        </div>
+        <HangmanProvider currentUser={currentUser}>
+            <FruitsProvider>
+                <HangmanGame />
+            </FruitsProvider>
+        </HangmanProvider>
     );
 };
 

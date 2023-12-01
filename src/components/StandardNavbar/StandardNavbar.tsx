@@ -3,14 +3,12 @@ import { NavLinks, SignOut } from '..';
 import { useDrawerContext } from '../../contexts/DrawerContext';
 import { useUserContext } from '../../contexts/userContext';
 import { capitalize } from '../utils';
+import { useDialogContext } from '../../contexts/DialogProvider';
 
-export const StandardNavbar = ({
-    onStateChange
-}: {
-    onStateChange: () => void;
-}) => {
+export const StandardNavbar = () => {
     const { setOpen } = useDrawerContext();
     const { currentUser } = useUserContext();
+    const { handleSignUpDialog } = useDialogContext();
 
     const email = currentUser?.email;
 
@@ -37,9 +35,9 @@ export const StandardNavbar = ({
                     {!email && (
                         <button
                             className="underline text-gray-500 font-semibold text-right animate-bounce py-[2px] px-[8px] rounded-[6px] hover:bg-gray-200 transition-all w-fit"
-                            onClick={() => onStateChange()}
+                            onClick={() => handleSignUpDialog(true)}
                         >
-                            Sign in
+                            Sign up!
                         </button>
                     )}
                 </div>

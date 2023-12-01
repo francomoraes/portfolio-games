@@ -51,7 +51,7 @@ export const HangmanGame = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="lg:w-[calc(100%-200px)] bg-[#191920] mx-auto p-[12px] xl:p-[32px] rounded shadow-md"
+            className="w-full h-full bg-[#191920] p-[12px] xl:p-[32px] rounded shadow-md"
         >
             <RenderScores />
             <RenderWord gameState={gameState} />
