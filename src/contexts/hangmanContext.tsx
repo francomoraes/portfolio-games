@@ -7,21 +7,13 @@ import {
     doc
 } from 'firebase/firestore';
 import { db } from '../firebase-config';
+import { useUserContext } from './userContext';
+import { IAppDataProps, UserDataProps } from './types';
 
 interface HangmanProviderProps {
     children: React.ReactNode;
-    currentUser: any;
 }
 
-interface IAppDataProps {
-    userId?: string;
-    id?: string;
-}
-interface UserDataProps {
-    id?: string;
-    wins?: number;
-    losses?: number;
-}
 interface HangmanContextType {
     wins: number;
     losses: number;
@@ -40,9 +32,9 @@ interface HangmanContextType {
 export const HangmanContext = createContext<HangmanContextType | null>(null);
 
 export const HangmanProvider: React.FC<HangmanProviderProps> = ({
-    children,
-    currentUser
+    children
 }) => {
+    const { currentUser } = useUserContext();
     const [wins, setWins] = useState<number>(0);
     const [losses, setLosses] = useState<number>(0);
     const [localWins, setLocalWins] = useState<number>(() => {

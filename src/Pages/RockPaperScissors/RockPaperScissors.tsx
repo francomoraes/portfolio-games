@@ -1,10 +1,11 @@
 import { RockPaperScissorsGame } from '../../components';
+import { RockPaperScissorsProvider } from '../../contexts/rockPaperScissorsContext';
 
 const RockPaperScissors = () => {
     return (
-        <div>
+        <RockPaperScissorsProvider>
             <RockPaperScissorsGame />
-        </div>
+        </RockPaperScissorsProvider>
     );
 };
 
