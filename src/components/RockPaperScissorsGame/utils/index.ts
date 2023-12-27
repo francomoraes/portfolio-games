@@ -1,0 +1,1 @@
+export { outcomes } from './outcomes';

@@ -17,3 +17,25 @@ export const useClassListEffect = (
         }
     }, [controlVariable]);
 };
+
+export const useMultipleClassListEffects = (
+    effectsArray: [string, any, string, string][]
+) => {
+    useEffect(
+        () => {
+            effectsArray.forEach(
+                ([selector, controlVariable, effectClass, afterClass]) => {
+                    const elem = document.querySelector(selector);
+                    if (elem) {
+                        elem.classList.add(effectClass);
+                        setTimeout(() => {
+                            elem.classList.remove(effectClass);
+                            elem.classList.add(afterClass);
+                        }, 1000);
+                    }
+                }
+            );
+        },
+        effectsArray.map(([, controlVariable]) => controlVariable)
+    );
+};

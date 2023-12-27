@@ -14,23 +14,16 @@ import { IAppDataProps, UserDataProps } from './types';
 export interface ScoreData {
     playerScore: number;
     computerScore: number;
-    draw: number;
+    draws: number;
 }
 
 interface RPSContextType {
+    playGame: (outcomes: any, buttonContent: string) => void;
     remoteScores: ScoreData;
-    setRemoteScores: React.Dispatch<React.SetStateAction<ScoreData>>;
     localScores: ScoreData;
-    setLocalScores: React.Dispatch<React.SetStateAction<ScoreData>>;
-    incrementLocalPlayerScore: () => void;
-    incrementLocalComputerScore: () => void;
-    incrementLocalDraw: () => void;
-    resetLocalScores: () => void;
-    updateLocalStorage: (
-        player: number,
-        computer: number,
-        draw: number
-    ) => void;
+    playerChoice: string;
+    computerChoice: string;
+    resetScores: () => void;
 }
 
 interface RPSProviderProps {
@@ -38,47 +31,32 @@ interface RPSProviderProps {
 }
 
 export const RockPaperScissorsContext = createContext<RPSContextType>({
-    remoteScores: { playerScore: 0, computerScore: 0, draw: 0 },
-    setRemoteScores: () => {},
-    localScores: { playerScore: 0, computerScore: 0, draw: 0 },
-    setLocalScores: () => {},
-    incrementLocalPlayerScore: () => {},
-    incrementLocalComputerScore: () => {},
-    incrementLocalDraw: () => {},
-    resetLocalScores: () => {},
-    updateLocalStorage: () => {}
+    playGame: () => {},
+    remoteScores: { playerScore: 0, computerScore: 0, draws: 0 },
+    localScores: { playerScore: 0, computerScore: 0, draws: 0 },
+    playerChoice: '',
+    computerChoice: '',
+    resetScores: () => {}
 });
 
 export const RockPaperScissorsProvider: React.FC<RPSProviderProps> = ({
     children
 }) => {
     const { currentUser } = useUserContext();
+
     const [remoteScores, setRemoteScores] = useState<ScoreData>({
         playerScore: 0,
         computerScore: 0,
-        draw: 0
+        draws: 0
     });
 
     const [localScores, setLocalScores] = useLocalStorageState(
         'gameDataRockPaperScissors',
-        { playerScore: 0, computerScore: 0, draw: 0 }
+        { playerScore: 0, computerScore: 0, draws: 0 }
     );
 
-    const updateLocalStorage = (
-        player: number,
-        computer: number,
-        draw: number
-    ) => {
-        const gameDataRockPaperScissors = {
-            playerScore: player,
-            computerScore: computer,
-            draw: draw
-        };
-        localStorage.setItem(
-            'gameDataRockPaperScissors',
-            JSON.stringify(gameDataRockPaperScissors)
-        );
-    };
+    const [playerChoice, setPlayerChoice] = useState('');
+    const [computerChoice, setComputerChoice] = useState('');
 
     const incrementLocalPlayerScore = () => {
         setLocalScores((prev: ScoreData) => ({
@@ -95,11 +73,14 @@ export const RockPaperScissorsProvider: React.FC<RPSProviderProps> = ({
     };
 
     const incrementLocalDraw = () => {
-        setLocalScores((prev: ScoreData) => ({ ...prev, draw: prev.draw + 1 }));
+        setLocalScores((prev: ScoreData) => ({
+            ...prev,
+            draws: prev.draws + 1
+        }));
     };
 
     const resetLocalScores = () => {
-        setLocalScores({ playerScore: 0, computerScore: 0, draw: 0 });
+        setLocalScores({ playerScore: 0, computerScore: 0, draws: 0 });
     };
 
     const rpsCollectionRef = collection(db, 'rock-paper-scissors-data');
@@ -128,7 +109,7 @@ export const RockPaperScissorsProvider: React.FC<RPSProviderProps> = ({
                 setRemoteScores({
                     playerScore: 0,
                     computerScore: 0,
-                    draw: 0
+                    draws: 0
                 });
             }
         };
@@ -157,12 +138,12 @@ export const RockPaperScissorsProvider: React.FC<RPSProviderProps> = ({
                     currentDoc.id
                 );
 
-                const { playerScore, computerScore, draw } = remoteScores;
+                const { playerScore, computerScore, draws } = remoteScores;
 
                 const newValues = {
                     playerScore,
                     computerScore,
-                    draw
+                    draws
                 };
                 await updateDoc(userDoc, newValues);
             }
@@ -187,7 +168,7 @@ export const RockPaperScissorsProvider: React.FC<RPSProviderProps> = ({
                 setRemoteScores({
                     playerScore: userData.playerScore ?? 0,
                     computerScore: userData.computerScore ?? 0,
-                    draw: userData.draws ?? 0
+                    draws: userData.draws ?? 0
                 });
             }
         };
@@ -195,18 +176,58 @@ export const RockPaperScissorsProvider: React.FC<RPSProviderProps> = ({
         getScoresFromDb();
     }, [currentUser]);
 
+    const resetScores = () => {
+        resetLocalScores();
+        setRemoteScores({ playerScore: 0, computerScore: 0, draws: 0 });
+    };
+
+    const playGame = (outcomes: any, buttonContent: string) => {
+        const choices = ['rock', 'paper', 'scissors'];
+        const randomChoice = Math.floor(Math.random() * choices.length);
+        const computerChoice = choices[randomChoice];
+
+        setPlayerChoice(buttonContent);
+        setComputerChoice(computerChoice);
+
+        if (outcomes[buttonContent][computerChoice] === 'player') {
+            if (currentUser) {
+                setRemoteScores((prev) => ({
+                    ...prev,
+                    playerScore: prev.playerScore + 1
+                }));
+            } else {
+                incrementLocalPlayerScore();
+            }
+        } else if (outcomes[buttonContent][computerChoice] === 'computer') {
+            if (currentUser) {
+                setRemoteScores((prev) => ({
+                    ...prev,
+                    computerScore: prev.computerScore + 1
+                }));
+            } else {
+                incrementLocalComputerScore();
+            }
+        } else if (outcomes[buttonContent][computerChoice] === 'draw') {
+            if (currentUser) {
+                setRemoteScores((prev) => ({
+                    ...prev,
+                    draws: prev.draws + 1
+                }));
+            } else {
+                incrementLocalDraw();
+            }
+        }
+    };
+
     return (
         <RockPaperScissorsContext.Provider
             value={{
+                playGame,
                 remoteScores,
-                setRemoteScores,
                 localScores,
-                setLocalScores,
-                incrementLocalPlayerScore,
-                incrementLocalComputerScore,
-                incrementLocalDraw,
-                resetLocalScores,
-                updateLocalStorage
+                playerChoice,
+                computerChoice,
+                resetScores
             }}
         >
             {children}

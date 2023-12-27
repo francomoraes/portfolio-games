@@ -1,0 +1,1 @@
+export { ScoresGrid } from './ScoresGrid';
